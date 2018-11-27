@@ -145,6 +145,8 @@ def painting_order():
 		g.conn.execute(text(op),a = order_number,b = order_items)
 		flash('Thank you for purchasing')
                 return redirect("/")
+
+
 @app.route("/gallery",methods=['POST'])
 def gallery():
     cursor = g.conn.execute("SELECT name FROM gallery")
@@ -176,6 +178,8 @@ def gallery():
         session['gallery_id'] = gallery['gallery_id']
     	return render_template('gallery.html', **context)
 
+
+
 @app.route('/donate',methods = ['POST'])
 def donate():
     amount = request.form['amount']
@@ -202,6 +206,9 @@ def all_galleries():
 
     context = dict(galleries = gallery_names)
     return render_template('all_galleries.html', **context)
+
+
+
 
 @app.route('/all_artists')
 def all_artists():
