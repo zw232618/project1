@@ -1,0 +1,40 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+<body>
+
+<div>
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</div>
+
+<div>
+{% block body %}
+{% if session['logged_in'] %}
+<p>You're logged in already!</p>
+{% else %}
+<form action="/login" method="POST">
+ <input type="text" name="user_id" placeholder="user_id eg. 1,2,3……">
+ <input type="submit" value="Log in">
+</form>
+{% endif %}
+{% endblock %}
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+<body>
+<div>
+	<p>name: {{artist[1]}}</p>
+	<p>artist id: {{artist[0]}}</p>
+	<p>telephone: {{artist[2]}}</p>
+
+  <p>works:
+<div>
+  {% if painting_created == []%}
+  <p>None</p>
+  {%else%}  
+    <div>
+     {% for n in painting_created %}
+    <div>{{n}}</div>
+    {% endfor %} </div>  
+    {%endif%} 
+    </div> </p>
+</div>
+</div>
+
+
+
+</body>
+
+<p><a href="/">Go back to the home page</a></p>
+
+
+</html>

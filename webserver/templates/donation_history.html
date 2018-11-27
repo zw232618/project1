@@ -1,0 +1,30 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Your donation history</h1>
+
+  <div>
+    {%if donation == []%}
+    <p>None</p>
+    {%else%}
+    {% for n in donation %}
+    <div>{{n}}</div>
+    {% endfor %}
+    {%endif%}
+  </div>
+
+
+<p><a href="/">Go back to the home page</a></p>
+
+</body>
+
+
+</html>

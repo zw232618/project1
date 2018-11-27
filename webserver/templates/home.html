@@ -1,0 +1,54 @@
+
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+ <body>
+  <h1>Welcome</h1>
+<div>
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+    {% endwith %}
+  </div>
+
+  <p><a href="/all_paintings">See all paintings</a></p>
+  <form method="POST" action="/painting">
+  <p>Search for a specific painting, please type in painting name <input type="text" name="painting" placeholder="Use above link to find a painting"> <input type="submit" value="Search"></p>
+  </form>  
+
+  <p><a href="/all_memberships">See all memberships</a></p>
+  <form method="POST" action="/membership">
+  <p>Search for a specific membership, please type in membership id <input type="text" name="membership" placeholder="Use above link to find a membership"> <input type="submit" value="Search"></p>
+  </form>
+
+  <p><a href="/all_artists">See all artists</a></p>
+  <form method="POST" action="/artist">
+  <p>Search for a specific artist, please type in artist name <input type="text" name="artist" placeholder="Use above link to find an artist"> <input type="submit" value="Search"></p>
+  </form>
+
+  <p><a href="/all_galleries">See all galleries</a></p>
+  <form method="POST" action="/gallery">
+  <p>Search for a specific gallery, please type in gallery name <input type="text" name="gallery" placeholder="Use above link to find a gallery"> <input type="submit" value="Search"></p>
+  </form>
+<p><a href="/order_history">Check order history</a></p>
+<p><a href="/donation_history">Check donation history</a></p>
+  <p><a href="/logout">Log out</a></p>
+
+
+ </body>
+
+
+
+
+</html>
