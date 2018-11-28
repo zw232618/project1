@@ -100,7 +100,6 @@ def painting():
     cursor = g.conn.execute("SELECT name FROM painting_stored_included")
     painting_names = []
     for p in cursor:
-    	print(p['name'])
         painting_names.append(p['name'])
     cursor.close()	
 
@@ -109,17 +108,29 @@ def painting():
     	flash("There's no such painting")
     	return redirect('/')
     else:
-    	op1 = """select p.name,p.date,p.medium,p.painting_id,p.price,p.status,a.name,g.name 
-		from painting_stored_included as p,created as c, gallery as g,artist as a 
-		where p.painting_id=c.painting and c.artist=a.artist_id and p.gallery=g.gallery_id and p.name=(:name1)"""
-    	cursor = g.conn.execute(text(op1), name1 = painting_name)
+    	op = 'SELECT name, date, medium, painting_id,price,status from painting_stored_included where name = (:name)'
+    	cursor = g.conn.execute(text(op), name = painting_name)
     	painting = cursor.fetchone()
     	cursor.close()	
     	session['painting_id'] = painting[3]
     	session['painting_name'] = painting[0]
     	session['painting_price'] = painting[4]
-    	context = dict(painting = painting)
-    return render_template("painting.html", **context)
+        op = 'SELECT g.name from painting_stored_included as p, gallery as g where p.gallery = g.gallery_id and p.name = (:name)'
+    	cursor = g.conn.execute(text(op), name = painting_name)
+        gallery = []
+        for c in cursor:
+		gallery.append(c[0])
+        cursor.close()
+        op = 'SELECT a.name from artist as a, painting_stored_included as p, created as c where c.painting = p.painting_id and a.artist_id = c.artist and p.name = (:name)'
+        cursor = g.conn.execute(text(op), name = painting_name)
+        artist = []
+        for c in cursor:
+		artist.append(c[0])
+        cursor.close()
+        context = dict(painting = painting, gallery = gallery, artist = artist)
+        return render_template("painting.html", **context)
+
+
 
 
 @app.route("/painting_order")
@@ -179,23 +190,32 @@ def gallery():
     	return render_template('gallery.html', **context)
 
 
-
 @app.route('/donate',methods = ['POST'])
 def donate():
-    amount = request.form['amount']
-    cursor = g.conn.execute('SELECT max(donation_id) FROM donation')
-    donation_id = cursor.fetchone()[0] + 1
-    session['donation_id'] = donation_id
-    cursor.close()
-    op = 'INSERT INTO donation(amount, donation_id) VALUES ((:amount),(:donation_id)) '
-    g.conn.execute(text(op), amount = amount, donation_id = donation_id)
-    users = session['user_id']
-    gallery = session['gallery_id']
-    donation = session['donation_id']
-    op = 'INSERT INTO donate_to(users,gallery,donation) VALUES ((:users),(:gallery),(:donation))'
-    g.conn.execute(text(op), users = users, gallery = gallery, donation = donation)
-    flash('Thanks for your donation')
-    return redirect('/')
+    if request.form['amount'] == '':
+        flash('Please enter a number')
+        return redirect('/')
+    else:
+        amount = int(request.form.get('amount'))
+        if amount <= 0:
+            flash('Please enter a positive number')
+            return redirect('/')
+        else:
+            cursor = g.conn.execute('SELECT max(donation_id) FROM donation')
+            donation_id = cursor.fetchone()[0] + 1
+            session['donation_id'] = donation_id
+            cursor.close()
+            op = 'INSERT INTO donation(amount, donation_id) VALUES ((:amount),(:donation_id)) '
+            g.conn.execute(text(op), amount = amount, donation_id = donation_id)
+            users = session['user_id']
+            gallery = session['gallery_id']
+            donation = session['donation_id']
+            op = 'INSERT INTO donate_to(users,gallery,donation) VALUES ((:users),(:gallery),(:donation))'
+            g.conn.execute(text(op), users = users, gallery = gallery, donation = donation)
+            flash('Thanks for your donation')
+            return redirect('/')
+
+
 @app.route("/all_galleries")
 def all_galleries():
     cursor = g.conn.execute("SELECT name FROM gallery")
