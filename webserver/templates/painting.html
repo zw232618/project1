@@ -14,8 +14,20 @@
 	<p>painting_id: {{painting[3]}}</p>
 	<p>price: {{painting[4]}}</p>
 	<p>status: {{painting[5]}}</p>
-	<p>artist: {{painting[6]}}</p>
-	<p>gallery: {{painting[7]}}</p>
+	<p>gallery:<div>
+		{%if gallery == []%}
+		<p>Unknown</p>
+		{%else%}
+		<div>{{gallery[0]}}</div>
+		{%endif%}
+	</div></p>
+		<p>artist:<div>
+		{%if artist == []%}
+		<p>Unknown</p>
+		{%else%}
+		<div>{{artist[0]}}</div>
+		{%endif%}
+	</div></p>
 </div>
 
 <p><a href="/painting_order">Buy</a></p>
